@@ -6,4 +6,9 @@ class TagPolicy < ApplicationPolicy
   def show?
     true
   end
+
+  def tag_things?
+    true
+  end
+
 end

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180209132545) do
+ActiveRecord::Schema.define(version: 20180209134508) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -66,6 +66,13 @@ ActiveRecord::Schema.define(version: 20180209132545) do
   add_index "thing_images", ["image_id", "thing_id"], name: "index_thing_images_on_image_id_and_thing_id", unique: true, using: :btree
   add_index "thing_images", ["image_id"], name: "index_thing_images_on_image_id", using: :btree
   add_index "thing_images", ["thing_id"], name: "index_thing_images_on_thing_id", using: :btree
+
+  create_table "thing_tags", force: :cascade do |t|
+    t.integer  "tag_id"
+    t.integer  "thing_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
 
   create_table "things", force: :cascade do |t|
     t.string   "name",        null: false

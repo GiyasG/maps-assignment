@@ -3,7 +3,19 @@ class Thing < ActiveRecord::Base
   validates :name, :presence=>true
 
   has_many :thing_images, inverse_of: :thing, dependent: :destroy
+  has_many :images, through: :thing_images
+
+  has_many :thing_tags, inverse_of: :thing, dependent: :destroy
+  has_many :tags, through: :thing_tags
 
   scope :not_linked, ->(image) { where.not(:id=>ThingImage.select(:thing_id)
-                                                          .where(:image=>image)) }
+                                .where(:image=>image)) }
+  scope :with_thing_images_info, -> {
+    joins(:thing_images)
+    .merge(ThingImage.with_name)
+    .merge(ThingImage.with_caption)
+    .merge(ThingImage.with_position)
+    .order('thing_images.priority')
+  }
+
 end
