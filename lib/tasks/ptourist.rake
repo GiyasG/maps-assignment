@@ -89,14 +89,26 @@ namespace :ptourist do
     end
   end
 
+  def create_tag organizer, thing, tag_name
+    puts "building tag #{tag_name} for #{thing[:name]}, by #{organizer.name}"
+    tag = Tag.find_by(name: tag_name)
+    if tag==nil
+      tag = Tag.create(:name=>tag)
+    end
+    binding.pry
+    thing.tags << tag
+    organizer.add_role(Role::ORGANIZER, tag).save
+  end
+
   desc "reset all data"
   task reset_all: [:users,:subjects] do
   end
 
-  desc "deletes things, images, and links"
+  desc "deletes things, images, links, tags"
   task delete_subjects: :environment do
     puts "removing #{Thing.count} things and #{ThingImage.count} thing_images"
     puts "removing #{Image.count} images"
+    puts "removing #{Tag.count} tags"
     DatabaseCleaner[:active_record].clean_with(:truncation, {:except=>%w[users]})
     DatabaseCleaner[:mongoid].clean_with(:truncation)
   end
@@ -153,6 +165,7 @@ namespace :ptourist do
      :lat=>39.2854217},
     ]
     create_thing thing, organizer, members, images
+    create_tag organizer, thing, 'Museum'
 
     thing={:name=>"Baltimore Water Taxi",
     :description=>"The Water Taxi is more than a jaunt across the harbor; it’s a Baltimore institution and a way of life. Every day, thousands of residents and visitors not only rely on us to take them safely to their destinations, they appreciate our knowledge of the area and our courteous service. And every day, hundreds of local businesses rely on us to deliver customers to their locations.  We know the city. We love the city. We keep the city moving. We help keep businesses thriving. And most importantly, we offer the most unique way to see Baltimore and provide an unforgettable experience that keeps our passengers coming back again and again.",
@@ -179,6 +192,7 @@ namespace :ptourist do
      :lat=>39.284038}
     ]
     create_thing thing, organizer, members, images
+    create_tag organizer, thing, 'Taxi'
 
     thing={:name=>"Rent-A-Tour",
     :description=>"Professional guide services and itinerary planner in Baltimore, Washington DC, Annapolis and the surronding region",
@@ -199,6 +213,7 @@ namespace :ptourist do
      }
     ]
     create_thing thing, organizer, members, images
+    create_tag organizer, thing, 'Tour'
 
     thing={:name=>"Holiday Inn Timonium",
     :description=>"Group friendly located just a few miles north of Baltimore's Inner Harbor. Great neighborhood in Baltimore County",
@@ -214,6 +229,7 @@ namespace :ptourist do
      }
     ]
     create_thing thing, organizer, members, images
+    create_tag organizer, thing, 'Hotel'
 
     thing={:name=>"National Aquarium",
     :description=>"Since first opening in 1981, the National Aquarium has become a world-class attraction in the heart of Baltimore. Recently celebrating our 35th Anniversary, we continue to be a symbol of urban renewal and a source of pride for Marylanders. With a mission to inspire the world’s aquatic treasures, the Aquarium is consistently ranked as one of the nation’s top aquariums and has hosted over 51 million guests since opening. A study by the Maryland Department of Economic and Employment Development determined that the Aquarium annually generates nearly $220 million in revenues, 2,000 jobs, and $6.8 million in State and local taxes. It was also recently named one of Baltimore’s Best Places to Work! In addition to housing nearly 20,000 animals, we have countless science-based education programs and hands-on conservation projects spanning from right here in the Chesapeake Bay to abroad in Costa Rica. Once you head inside, The National Aquarium has the ability to transport you all over the world in a matter of hours to discover hundreds of incredible species. From the Freshwater Crocodile in our Australia: Wild Extremes exhibit all the way to a Largetooth Sawfish in the depths of Shark Alley. Recently winning top honors from the Association of Zoos and Aquariums for outstanding design, exhibit innovation and guest engagement, we can’t forget about Living Seashore; an exhibit where guests can touch Atlantic stingrays, Horseshoe crabs, and even Moon jellies if they wish! It is a place for friends, family, and people from all walks of life to come and learn about the extraordinary creatures we share our planet with. Through education, research, conservation action and advocacy, the National Aquarium is truly pursuing a vision to change the way humanity cares for our ocean planet.",
@@ -244,6 +260,7 @@ namespace :ptourist do
      }
     ]
     create_thing thing, organizer, members, images
+    create_tag organizer, thing, 'Museum'
 
     thing={:name=>"Hyatt Place Baltimore",
     :description=>"The New Hyatt Place Baltimore/Inner Harbor, located near Fells Point, offers a refreshing blend of style and innovation in a neighborhood alive with cultural attractions, shopping and amazing local restaurants.
@@ -304,6 +321,7 @@ Work up a sweat in our 24-hour StayFit Gym, which features Life Fitness® cardio
      }
     ]
     create_thing thing, organizer, members, images
+    create_tag organizer, thing, 'Hotel'
 
     organizer=get_user("peter")
     image= {:path=>"db/bta/aquarium.jpg",
