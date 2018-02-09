@@ -1,12 +1,14 @@
 class TagsController < ApplicationController
   before_action :set_tag, only: [:show]
-
+  after_action :verify_authorized
 
   def index
+    authorize Tag
     @tags = Tag.all
   end
 
   def show
+    authorize @tag
   end
 
 
