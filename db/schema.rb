@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180209134508) do
+ActiveRecord::Schema.define(version: 20180212115017) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -74,6 +74,9 @@ ActiveRecord::Schema.define(version: 20180209134508) do
     t.datetime "updated_at", null: false
   end
 
+  add_index "thing_tags", ["tag_id"], name: "index_thing_tags_on_tag_id", using: :btree
+  add_index "thing_tags", ["thing_id"], name: "index_thing_tags_on_thing_id", using: :btree
+
   create_table "things", force: :cascade do |t|
     t.string   "name",        null: false
     t.text     "description"
@@ -116,4 +119,6 @@ ActiveRecord::Schema.define(version: 20180209134508) do
   add_foreign_key "roles", "users"
   add_foreign_key "thing_images", "images"
   add_foreign_key "thing_images", "things"
+  add_foreign_key "thing_tags", "tags"
+  add_foreign_key "thing_tags", "things"
 end

@@ -87,15 +87,15 @@ namespace :ptourist do
                 .tap {|ti| ti.priority=img[:priority] if img[:priority]}.save!
       create_image_content img.merge(:image=>image)
     end
+    thing
   end
 
   def create_tag organizer, thing, tag_name
     puts "building tag #{tag_name} for #{thing[:name]}, by #{organizer.name}"
     tag = Tag.find_by(name: tag_name)
-    if tag==nil
-      tag = Tag.create(:name=>tag)
+    if tag.nil?
+      tag = Tag.create!(:name=>tag_name)
     end
-    binding.pry
     thing.tags << tag
     organizer.add_role(Role::ORGANIZER, tag).save
   end
@@ -104,7 +104,7 @@ namespace :ptourist do
   task reset_all: [:users,:subjects] do
   end
 
-  desc "deletes things, images, links, tags"
+  desc "deletes things, images, links and tags"
   task delete_subjects: :environment do
     puts "removing #{Thing.count} things and #{ThingImage.count} thing_images"
     puts "removing #{Image.count} images"
@@ -135,6 +135,7 @@ namespace :ptourist do
 
     originator_users.each do |user|
       user.add_role(Role::ORIGINATOR, Thing).save
+      user.add_role(Role::ORIGINATOR, Tag).save
     end
 
     puts "users:#{User.pluck(:name)}"
@@ -164,7 +165,7 @@ namespace :ptourist do
      :lng=>-76.6327453,
      :lat=>39.2854217},
     ]
-    create_thing thing, organizer, members, images
+    thing = create_thing thing, organizer, members, images
     create_tag organizer, thing, 'Museum'
 
     thing={:name=>"Baltimore Water Taxi",
@@ -191,7 +192,7 @@ namespace :ptourist do
      :lng=>-76.605206,
      :lat=>39.284038}
     ]
-    create_thing thing, organizer, members, images
+    thing = create_thing thing, organizer, members, images
     create_tag organizer, thing, 'Taxi'
 
     thing={:name=>"Rent-A-Tour",
@@ -212,8 +213,8 @@ namespace :ptourist do
      :priority=>0
      }
     ]
-    create_thing thing, organizer, members, images
-    create_tag organizer, thing, 'Tour'
+    thing = create_thing thing, organizer, members, images
+    create_tag organizer, thing, 'Attraction'
 
     thing={:name=>"Holiday Inn Timonium",
     :description=>"Group friendly located just a few miles north of Baltimore's Inner Harbor. Great neighborhood in Baltimore County",
@@ -228,7 +229,7 @@ namespace :ptourist do
      :priority=>0
      }
     ]
-    create_thing thing, organizer, members, images
+    thing = create_thing thing, organizer, members, images
     create_tag organizer, thing, 'Hotel'
 
     thing={:name=>"National Aquarium",
@@ -259,8 +260,9 @@ namespace :ptourist do
      :lat=>39.2851,
      }
     ]
-    create_thing thing, organizer, members, images
+    thing = create_thing thing, organizer, members, images
     create_tag organizer, thing, 'Museum'
+    create_tag organizer, thing, 'Attraction'
 
     thing={:name=>"Hyatt Place Baltimore",
     :description=>"The New Hyatt Place Baltimore/Inner Harbor, located near Fells Point, offers a refreshing blend of style and innovation in a neighborhood alive with cultural attractions, shopping and amazing local restaurants.
@@ -320,7 +322,7 @@ Work up a sweat in our 24-hour StayFit Gym, which features Life Fitness® cardio
      :lat=>39.2847
      }
     ]
-    create_thing thing, organizer, members, images
+    thing = create_thing thing, organizer, members, images
     create_tag organizer, thing, 'Hotel'
 
     organizer=get_user("peter")
