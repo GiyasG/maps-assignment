@@ -1,1 +1,10 @@
-<span>Current Tag page</span>
+<!-- <span>Current Tag page</span> -->
+<ul class="items tags">
+  <li ng-repeat="ti in $ctrl.tags"
+      ng-class="{selected: $ctrl.currentIndex == ti.id}">
+    <a ng-click="$ctrl.tagClicked(ti.id)">
+      <span class="id tag_id">{{ti.id}}</span>
+      <span class="name">{{ti.name}}</span>
+    </a>
+  </li>
+</ul>
