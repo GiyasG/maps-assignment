@@ -13,7 +13,7 @@ class TagsController < ApplicationController
 
   def tag_things
     authorize Tag
-    binding.pry
+    # binding.pry
     @tag_things = @tag.things.with_images_infos
     @tag_things = @tag_things.all.to_a.uniq { |item| item.thing_id }
   end

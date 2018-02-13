@@ -13,9 +13,9 @@ class Thing < ActiveRecord::Base
 
   scope :with_images_infos, -> {
    joins(:thing_images)
-    .merge(ThingImage.with_name)
-    .merge(ThingImage.with_caption)
-    .merge(ThingImage.with_position)
-    .order('thing_images.priority')
+   .merge(ThingImage.with_name)
+   .merge(ThingImage.with_caption)
+   .merge(ThingImage.with_position)
+   .order('thing_images.priority')
   }
 end
