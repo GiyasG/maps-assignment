@@ -18,4 +18,9 @@ class Thing < ActiveRecord::Base
    .merge(ThingImage.with_position)
    .order('thing_images.priority')
   }
+
+  # scope :with_tags, -> {
+  #
+  # }
+
 end

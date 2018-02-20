@@ -24,6 +24,7 @@
     vm.$onInit = function() {
       console.log("CurrentTagsController",$scope);
       vm.tags = currentTags.query();
+      console.log("query tags", vm.tags);
       vm.tags.$promise.then(function(){
       vm.currentIndex = vm.tags[0].id;
       return currentSubjects.refreshTags(vm.tags[0].id);

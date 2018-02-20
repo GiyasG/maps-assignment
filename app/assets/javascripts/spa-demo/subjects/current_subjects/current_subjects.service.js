@@ -81,7 +81,7 @@
       return result.$promise;
     }
 
-    function refreshTags(tagId) {
+  function refreshTags(tagId) {
   var resource = $resource(APP_CONFIG.server_url + "/api/tags/:tag_id/things", {tag_id: '@tag_id'}, {
     query: { cache:false, isArray:true }
   });

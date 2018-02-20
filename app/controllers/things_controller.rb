@@ -2,6 +2,7 @@ class ThingsController < ApplicationController
   include ActionController::Helpers
   helper ThingsHelper
   before_action :set_thing, only: [:show, :update, :destroy]
+  before_action :set_thing_tag, only: [:things_tags]
   before_action :authenticate_user!, only: [:create, :update, :destroy]
   wrap_parameters :thing, include: ["name", "description", "notes"]
   after_action :verify_authorized
@@ -54,10 +55,28 @@ class ThingsController < ApplicationController
     head :no_content
   end
 
+  def things_tags
+    authorize Thing
+    @thing_tags = @thing_tag
+    # binding.pry
+    @thingsfortag = []
+    @thing_tags.each do |p|
+      @thingsfortag.push(Tag.find(p.tag_id))
+    # binding.pry
+    end
+  end
+
+
   private
 
     def set_thing
       @thing = Thing.find(params[:id])
+      # binding.pry
+    end
+
+    def set_thing_tag
+      @thing_tag = ThingTag.where(:thing_id=>params[:thing_id])
+      # binding.pry
     end
 
     def thing_params

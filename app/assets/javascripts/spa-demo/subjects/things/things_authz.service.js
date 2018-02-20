@@ -32,7 +32,11 @@
     ThingsAuthz.prototype.canRemoveImage=function(thing) {
         return Authz.isOrganizer(thing) || Authz.isAdmin();
     };
-    
+
+    ThingsAuthz.prototype.canRemoveTag=function(tag) {
+        return Authz.isOrganizer(tag) || Authz.isAdmin();
+    };
+
     return new ThingsAuthz();
   }
 })();
